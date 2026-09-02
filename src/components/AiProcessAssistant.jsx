@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Send, Bot, HelpCircle, RefreshCw, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Sparkles, Send, Bot, HelpCircle, RefreshCw, CheckCircle2, DollarSign, AlertCircle, Lightbulb } from 'lucide-react';
 import ThinkingMachine from './ThinkingMachine';
 
 export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%', propagationData = {}, selectedOption = 'B' }) {
@@ -9,10 +9,10 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
   const [showThinking, setShowThinking] = useState(false);
 
   const presetQuestions = [
+    "What if I shut down station 1 completely?",
     "How can we eliminate queue buildup at BC-10 entirely?",
     "Compare Option B (Operator Move) vs Option C (Maintenance)",
-    "What if we reduce upstream feed rate by 15%?",
-    "What is the financial ROI of adding a buffer station?"
+    "What if we reduce upstream feed rate by 15%?"
   ];
 
   const handleAsk = (queryToAsk) => {
@@ -66,10 +66,10 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
             <h3 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
               Gemini AI Process Assistant
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                Interactive Query Box
+                Process Query Engine
               </span>
             </h3>
-            <p className="text-xs text-slate-400">Ask any process question, scenario modification, or financial trade-off query</p>
+            <p className="text-xs text-slate-400">Ask any scenario question — get an instant 3-line financial & operational analysis</p>
           </div>
         </div>
         <Sparkles className="w-4 h-4 text-indigo-400 animate-pulse" />
@@ -79,7 +79,7 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
       <div className="space-y-1.5">
         <p className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
           <HelpCircle className="w-3 h-3 text-indigo-400" />
-          Suggested Process Queries:
+          Quick Process Questions:
         </p>
         <div className="flex flex-wrap gap-2">
           {presetQuestions.map((pq, idx) => (
@@ -100,7 +100,7 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
         <div className="relative flex-1">
           <input
             type="text"
-            placeholder="Type your process question (e.g., What if we double floating technicians?)..."
+            placeholder="Ask a question (e.g. What if I shut down station 1 completely?)..."
             value={userQuery}
             onChange={e => setUserQuery(e.target.value)}
             className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
@@ -114,7 +114,7 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
           {loading ? (
             <>
               <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-              Thinking…
+              Analyzing…
             </>
           ) : (
             <>
@@ -129,13 +129,13 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
       {loading && showThinking && (
         <ThinkingMachine
           title="Gemini AI Reasoning Engine"
-          subTitle={`Processing question: "${userQuery}"`}
+          subTitle={`Analyzing impact for: "${userQuery}"`}
           isThinking={true}
           autoExpand={true}
         />
       )}
 
-      {/* Formatted Answer Response Box */}
+      {/* Structured 3-Line Response Display */}
       {aiResponse && !loading && (
         <div className="p-4 rounded-xl bg-slate-950 border border-indigo-500/30 space-y-3 animate-fade-in">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
@@ -148,8 +148,35 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
             </span>
           </div>
 
-          <div className="text-xs text-slate-200 leading-relaxed font-sans whitespace-pre-wrap">
-            {aiResponse.explanation}
+          {/* Render lines cleanly */}
+          <div className="space-y-2 text-xs text-slate-200 leading-relaxed font-sans">
+            {aiResponse.explanation.split('\n').filter(line => line.trim()).map((line, i) => {
+              const isFinancial = line.includes('FINANCIAL') || line.includes('💸');
+              const isImpact = line.includes('OPERATIONAL') || line.includes('🛑');
+              const isAction = line.includes('RECOMMENDED') || line.includes('💡');
+
+              return (
+                <div
+                  key={i}
+                  className={`p-3 rounded-lg border flex items-start gap-2.5 transition-all ${
+                    isFinancial ? 'bg-rose-500/10 border-rose-500/30 text-rose-200' :
+                    isImpact ? 'bg-amber-500/10 border-amber-500/30 text-amber-200' :
+                    isAction ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-200' :
+                    'bg-slate-900 border-slate-800 text-slate-200'
+                  }`}
+                >
+                  <div className="mt-0.5 flex-shrink-0">
+                    {isFinancial && <DollarSign className="w-4 h-4 text-rose-400" />}
+                    {isImpact && <AlertCircle className="w-4 h-4 text-amber-400" />}
+                    {isAction && <Lightbulb className="w-4 h-4 text-emerald-400" />}
+                    {!isFinancial && !isImpact && !isAction && <Bot className="w-4 h-4 text-indigo-400" />}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-xs leading-normal">{line}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

@@ -430,41 +430,47 @@ Write a concise 2-sentence executive summary for plant leadership.`,
       };
 
     case 'CUSTOM_PROCESS_QUERY': {
-      const q = payload.userQuestion || 'How to optimize assembly line bottleneck?';
+      const q = payload.userQuestion || 'What if I shut down station 1 completely?';
       const sc = payload.scenario || 'BC-10 slows 10%';
       const loss = payload.loss || '₹2.8L';
 
       const prompt = `You are an expert AI Manufacturing & Digital Twin Process Engineer.
 Current Factory Twin Context:
 - Active Disruption Scenario: ${sc}
-- Simulated Financial Loss: ${loss}
-- Queue Impact: ${payload.queue || '+19 units'}
-- Throughput Impact: ${payload.throughput || '-18%'}
+- Simulated Financial Impact: ${loss}
+- 38-Station Line: Body Construction (BC-01 to BC-14) ➔ Paint (PT-01 to PT-08) ➔ Final Assembly (FA-01 to FA-16)
 
-User Process Question: "${q}"
+User Question: "${q}"
 
-Respond in structured format:
-OPERATIONAL ANALYSIS: Concise 2-sentence engineering answer to "${q}".
-DATA IMPACT: Specific queue delta, OEE shift %, and financial savings.
-RECOMMENDED ACTION: Clear step-by-step recommendation for the floor supervisor.`;
+Respond in EXACTLY 3 crisp lines:
+Line 1 (Financial Loss): "💸 FINANCIAL LOSS: [Exact financial loss amount and cost impact]"
+Line 2 (Operational Impact): "🛑 OPERATIONAL IMPACT: [Exact line starvation impact on downstream stations]"
+Line 3 (Recommended Action): "💡 RECOMMENDED ACTION: [Actionable advice or recovery steps]"`;
 
-      let fallbackAnalysis = `Based on current digital twin simulation (${sc}), addressing constraint at station BC-10 minimizes downstream queue propagation and protects plant OEE.`;
-      if (q.toLowerCase().includes('queue') || q.toLowerCase().includes('eliminate')) {
-        fallbackAnalysis = `Reallocating 1 floating operator to BC-10 absorbs cycle time variation, capping queue buildup at +4 units rather than +19 units.`;
-      } else if (q.toLowerCase().includes('option') || q.toLowerCase().includes('compare')) {
-        fallbackAnalysis = `Option B (Move 1 operator) delivers 68% loss reduction (₹0.9L loss) with 12-min recovery, whereas Option C (Maintenance) requires a 25-min line pause (₹1.4L loss).`;
-      } else if (q.toLowerCase().includes('feed') || q.toLowerCase().includes('rate')) {
-        fallbackAnalysis = `Adjusting feed rate by 15% stabilizes upstream buffer queues, reducing bottleneck risk at BC-10 from 91% down to 34%.`;
+      let line1 = `💸 FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) for every 10 minutes of complete station outage.`;
+      let line2 = `🛑 OPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, halting production across the entire assembly line.`;
+      let line3 = `💡 RECOMMENDED ACTION: Activate emergency backup buffer feed immediately or dispatch floating technicians to prevent line shutdown.`;
+
+      const qLower = q.toLowerCase();
+      if (qLower.includes('shut down') || qLower.includes('station 1') || qLower.includes('stop') || qLower.includes('outage') || qLower.includes('bc-01')) {
+        line1 = `💸 FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) due to complete line starvation and idle worker downtime.`;
+        line2 = `🛑 OPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, leaving them with no parts so they cannot work.`;
+        line3 = `💡 RECOMMENDED ACTION: Activate emergency backup buffer feed immediately or dispatch floating technicians for quick-turnaround restoration.`;
+      } else if (qLower.includes('queue') || qLower.includes('eliminate')) {
+        line1 = `💸 FINANCIAL LOSS: Unmitigated queue buildup at BC-10 results in ₹2.8L ($3,400) in throughput delay loss.`;
+        line2 = `🛑 OPERATIONAL IMPACT: Station BC-10 cycle time drift causes backpressure up to station BC-06, reducing plant throughput by 18%.`;
+        line3 = `💡 RECOMMENDED ACTION: Reallocate 1 floating technician to BC-10 to cap queue buildup at +4 units instead of +19 units.`;
+      } else if (qLower.includes('option') || qLower.includes('compare')) {
+        line1 = `💸 FINANCIAL LOSS: Option B (Move 1 operator) limits financial loss to ₹0.9L, saving ₹1.9L compared to Option A (Do nothing).`;
+        line2 = `🛑 OPERATIONAL IMPACT: Option B achieves 12-min line recovery without requiring a 25-min line stoppage for maintenance (Option C).`;
+        line3 = `💡 RECOMMENDED ACTION: Approve Option B in the Human-in-the-Loop gate to deploy technician reallocation immediately.`;
+      } else if (qLower.includes('feed') || qLower.includes('rate')) {
+        line1 = `💸 FINANCIAL LOSS: Cutting feed rate by 15% incurs a mild throughput loss of ₹1.2L ($1,450).`;
+        line2 = `🛑 OPERATIONAL IMPACT: Lowering feed rate relieves bottleneck pressure at BC-10, dropping risk from 91% to 34% across downstream stations.`;
+        line3 = `💡 RECOMMENDED ACTION: Temporarily throttle feed rate by 15% while station BC-10 undergoes preventative inspection.`;
       }
 
-      const fallback = `⚡ OPERATIONAL ANALYSIS: ${fallbackAnalysis}
-
-📊 ESTIMATED DATA IMPACT:
-• Queue Delta: +4 units (vs +19 units unmitigated)
-• OEE Impact: +3.2% recovery
-• Net Financial Saved: ₹1.9L ($2,300)
-
-💡 RECOMMENDED ACTION: Deploy Option B (Reallocate floating technician) and monitor cycle time drift over the next 15 production units.`;
+      const fallback = `${line1}\n${line2}\n${line3}`;
 
       return { prompt, fallback };
     }
