@@ -1,0 +1,382 @@
+[
+  {
+    "id": "BC-01",
+    "name": "Metal Stamping",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 58,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-02",
+    "name": "Chassis Framing",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 62,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-03",
+    "name": "Underbody Weld",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 55,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-04",
+    "name": "Side Panel Weld",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 60,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-05",
+    "name": "Roof Weld",
+    "phase": "Body Construction",
+    "sensor_tier": "checklist_only",
+    "base_cycle_time": 45,
+    "cycle_time_std": 5,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-06",
+    "name": "Door Fitting",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 50,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-07",
+    "name": "Torque Fastening A",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 40,
+    "cycle_time_std": 2,
+    "defect_origin_prob": 0.035,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-08",
+    "name": "Hood/Trunk Fitting",
+    "phase": "Body Construction",
+    "sensor_tier": "checklist_only",
+    "base_cycle_time": 48,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-09",
+    "name": "Weld Quality Check",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 35,
+    "cycle_time_std": 2,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-10",
+    "name": "Chassis Alignment",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 65,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": { "start_unit": 250, "rate": 0.18 }
+  },
+  {
+    "id": "BC-11",
+    "name": "Panel Gap Inspection",
+    "phase": "Body Construction",
+    "sensor_tier": "checklist_only",
+    "base_cycle_time": 30,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-12",
+    "name": "Sealant Application",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 42,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-13",
+    "name": "Body Buck-off",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 38,
+    "cycle_time_std": 2,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "BC-14",
+    "name": "Pre-Paint Inspection",
+    "phase": "Body Construction",
+    "sensor_tier": "full",
+    "base_cycle_time": 33,
+    "cycle_time_std": 2,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "PT-01",
+    "name": "Pretreatment",
+    "phase": "Paint",
+    "sensor_tier": "full",
+    "base_cycle_time": 70,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "PT-02",
+    "name": "E-Coat",
+    "phase": "Paint",
+    "sensor_tier": "full",
+    "base_cycle_time": 85,
+    "cycle_time_std": 5,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "PT-03",
+    "name": "Sealer Application",
+    "phase": "Paint",
+    "sensor_tier": "checklist_only",
+    "base_cycle_time": 40,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "PT-04",
+    "name": "Primer Spray",
+    "phase": "Paint",
+    "sensor_tier": "full",
+    "base_cycle_time": 55,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "PT-05",
+    "name": "Basecoat Spray",
+    "phase": "Paint",
+    "sensor_tier": "full",
+    "base_cycle_time": 60,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0.03,
+    "wear_drift": null
+  },
+  {
+    "id": "PT-06",
+    "name": "Clearcoat Spray",
+    "phase": "Paint",
+    "sensor_tier": "full",
+    "base_cycle_time": 58,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "PT-07",
+    "name": "Paint Oven Cure",
+    "phase": "Paint",
+    "sensor_tier": "full",
+    "base_cycle_time": 95,
+    "cycle_time_std": 5,
+    "defect_origin_prob": 0,
+    "wear_drift": { "start_unit": 400, "rate": 0.22 }
+  },
+  {
+    "id": "PT-08",
+    "name": "Paint Inspection",
+    "phase": "Paint",
+    "sensor_tier": "full",
+    "base_cycle_time": 32,
+    "cycle_time_std": 2,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-01",
+    "name": "Trim Install",
+    "phase": "Final Assembly",
+    "sensor_tier": "checklist_only",
+    "base_cycle_time": 50,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-02",
+    "name": "Wiring Harness",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 75,
+    "cycle_time_std": 5,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-03",
+    "name": "Dashboard Install",
+    "phase": "Final Assembly",
+    "sensor_tier": "checklist_only",
+    "base_cycle_time": 55,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-04",
+    "name": "Seat Install",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 48,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-05",
+    "name": "Glass Install",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 52,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-06",
+    "name": "Engine Marriage",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 90,
+    "cycle_time_std": 5,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-07",
+    "name": "Torque Fastening B",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 42,
+    "cycle_time_std": 2,
+    "defect_origin_prob": 0.03,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-08",
+    "name": "Fluid Fill",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 46,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-09",
+    "name": "Wheel/Tire Mount",
+    "phase": "Final Assembly",
+    "sensor_tier": "checklist_only",
+    "base_cycle_time": 38,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-10",
+    "name": "Suspension Align",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 50,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-11",
+    "name": "Electrical Test",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 60,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-12",
+    "name": "Brake System Check",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 45,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-13",
+    "name": "Interior Trim",
+    "phase": "Final Assembly",
+    "sensor_tier": "checklist_only",
+    "base_cycle_time": 48,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-14",
+    "name": "Exterior Trim",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 40,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-15",
+    "name": "Water Leak Test",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 55,
+    "cycle_time_std": 3,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  },
+  {
+    "id": "FA-16",
+    "name": "Final Quality Inspection",
+    "phase": "Final Assembly",
+    "sensor_tier": "full",
+    "base_cycle_time": 65,
+    "cycle_time_std": 4,
+    "defect_origin_prob": 0,
+    "wear_drift": null
+  }
+]
