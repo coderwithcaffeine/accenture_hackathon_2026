@@ -1,12 +1,13 @@
 import React from 'react';
 import ThemeToggle from './ThemeToggle';
-import { Activity, Zap, Sliders, ShieldCheck, RefreshCw, Cpu } from 'lucide-react';
+import { Activity, Zap, Sliders, ShieldCheck, RefreshCw, Cpu, Radar } from 'lucide-react';
 
 export default function Header({ activeTab, setActiveTab, onResimulate, loading, geminiActive }) {
   const tabs = [
     { id: 'floor', label: 'Floor Supervisor', icon: Activity },
     { id: 'insights', label: 'AI Insights', icon: Zap },
     { id: 'simulate', label: 'What-If Simulate', icon: Sliders },
+    { id: 'radar', label: 'AI Prescriptive Radar', icon: Radar },
     { id: 'control_room', label: 'Control Room', icon: ShieldCheck }
   ];
 

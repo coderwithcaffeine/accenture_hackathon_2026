@@ -21,13 +21,17 @@ In modern automotive and discrete manufacturing, assembly lines are rarely ideal
 
 ## 🏆 Round 2 Hackathon-Winning Features & Creative Enhancements
 
-1. **🌊 Live Line Propagation & Starvation Heatmap Mode**:
+1. **📡 AI Prescriptive Radar & CMMS Studio (NEW TAB!)**:
+   - **Physics-Informed Anomaly Radar**: Computes real-time equipment Health Index scores (0-100%) and **Remaining Useful Life (RUL)** in operating hours across all 38 stations.
+   - **Judges' Live Telemetry Stress Test Sandbox**: Allows judges to inject live thermal over-heat (`+18°C`), vibration spikes (`+0.85g`), or torque fastener drift (`+15Nm`) on any station and watch RUL and health decay in real-time.
+   - **Auto-Generated Prescriptive CMMS Work Orders**: Generates digital work orders (OEM spare part SKUs, prescribed skill level, avoided downtime loss ₹4.5L / $5,400) with a 1-click **Auto-Dispatch to Factory CMMS** button.
+2. **🌊 Live Line Propagation & Starvation Heatmap Mode**:
    - Visualizes real-time **Upstream Backpressure Queue Waves** (S3 ➔ S2 slowdown propagation) and **Downstream Part Starvation Waves** directly on the 38-station material conveyor track.
-2. **⚡ Interactive 38-Station Disruption Sandbox**:
+3. **⚡ Interactive 38-Station Disruption Sandbox**:
    - Pick ANY station (`BC-01` to `FA-16`) and drag the **Disruption Severity Slider (10% to 100%)** to simulate real-time queue accumulation, throughput drop %, defect risk elevation, and financial loss in real-time.
-3. **🤖 Gemini AI Station Assistant & Domain Guardrail**:
+4. **🤖 Gemini AI Station Assistant & Domain Guardrail**:
    - Interactive process query box with system role context, 3-line structured operational analysis (Financial Loss, Line Starvation, Actionable Recommendation), and domain boundary refusal (`"I am station ai not general purpose ai"`).
-4. **🧠 Step-by-Step AI Reasoning Trace (Thinking Machine)**:
+5. **🧠 Step-by-Step AI Reasoning Trace (Thinking Machine)**:
    - Live collapsible trace showing domain validation, dependency matrix calculation, financial impact assessment, and 3-line operational synthesis.
 
 ---

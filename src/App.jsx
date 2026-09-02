@@ -5,6 +5,7 @@ import StatusRibbon from './components/StatusRibbon';
 import FloorSupervisorView from './components/FloorSupervisorView';
 import InsightsView from './components/InsightsView';
 import SimulateView from './components/SimulateView';
+import AiRadarView from './components/AiRadarView';
 import ControlRoomView from './components/ControlRoomView';
 import UnitLineageModal from './components/UnitLineageModal';
 import WhatIfSimulatorModal from './components/WhatIfSimulatorModal';
@@ -89,6 +90,9 @@ export default function App() {
                   if (updatedData) setDashboardData(updatedData);
                 }}
               />
+            )}
+            {activeTab === 'radar' && (
+              <AiRadarView stationStatuses={dashboardData.floor?.stations} />
             )}
             {activeTab === 'control_room' && (
               <ControlRoomView
