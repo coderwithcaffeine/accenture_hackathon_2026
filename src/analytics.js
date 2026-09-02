@@ -434,24 +434,52 @@ Write a concise 2-sentence executive summary for plant leadership.`,
       const sc = payload.scenario || 'BC-10 slows 10%';
       const loss = payload.loss || '₹2.8L';
 
-      const prompt = `You are an expert AI Manufacturing & Digital Twin Process Engineer.
-Current Factory Twin Context:
+      const prompt = `SYSTEM ROLE: You are DigitalTwin.ai Assembly Station AI Assistant, a specialized industrial AI for a 38-station mixed-model vehicle assembly line (BC-01 to BC-14 Body Construction, PT-01 to PT-08 Paint, FA-01 to FA-16 Final Assembly).
+
+CRITICAL GUARDRAIL RULE:
+If the user's question is NOT directly related to the assembly line, manufacturing equipment, station cycle times, bottlenecks, defects, plant OEE, throughput, or twin simulation (e.g. general knowledge, sports, trivia, coding, recipes, casual chat), YOU MUST REPLY ONLY WITH:
+"I am station ai not general purpose ai"
+
+FACTORY DIGITAL TWIN CONTEXT:
 - Active Disruption Scenario: ${sc}
-- Simulated Financial Impact: ${loss}
-- 38-Station Line: Body Construction (BC-01 to BC-14) ➔ Paint (PT-01 to PT-08) ➔ Final Assembly (FA-01 to FA-16)
+- Simulated Financial Loss: ${loss}
+- Current Queue Impact: ${payload.queue || '+19 units'}
+- Throughput Impact: ${payload.throughput || '-18%'}
+- Active Mitigation: ${payload.selectedOption || 'Option B: Move 1 operator'}
 
-User Question: "${q}"
+USER QUESTION: "${q}"
 
-Respond in EXACTLY 3 crisp lines:
-Line 1 (Financial Loss): "💸 FINANCIAL LOSS: [Exact financial loss amount and cost impact]"
-Line 2 (Operational Impact): "🛑 OPERATIONAL IMPACT: [Exact line starvation impact on downstream stations]"
-Line 3 (Recommended Action): "💡 RECOMMENDED ACTION: [Actionable advice or recovery steps]"`;
+If the question IS related to the manufacturing process or stations, respond in EXACTLY 3 lines:
+Line 1: "💸 FINANCIAL LOSS: [Exact financial loss amount and cost impact]"
+Line 2: "🛑 OPERATIONAL IMPACT: [Exact line starvation impact on downstream stations]"
+Line 3: "💡 RECOMMENDED ACTION: [Actionable advice or recovery steps]"`;
+
+      const qLower = q.toLowerCase();
+
+      // Check if question is unrelated to manufacturing/assembly line domain
+      const processKeywords = [
+        'station', 'line', 'shut down', 'shutdown', 'stop', 'queue', 'bottleneck', 'defect', 
+        'oee', 'takt', 'cycle', 'weld', 'paint', 'assembly', 'operator', 'feed', 'rate', 
+        'option', 'loss', 'impact', 'maintenance', 'throughput', 'bc-', 'pt-', 'fa-', 
+        'unit', 'slowdown', 'buffer', 'cost', 'plant', 'machine', 'equipment', 'production', 
+        'manufacturing', 'twin', 'quality', 'torque', 'vibration', 'temperature', 'flange', 
+        'stamping', 'framing', 'cure', 'marriage', 'trim', 'fail', 'outage', 'why', 'how', 'what'
+      ];
+
+      const isRelated = processKeywords.some(kw => qLower.includes(kw));
+
+      // Guardrail response for unrelated non-manufacturing questions
+      if (!isRelated && qLower.length > 3) {
+        return {
+          prompt,
+          fallback: "I am station ai not general purpose ai"
+        };
+      }
 
       let line1 = `💸 FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) for every 10 minutes of complete station outage.`;
       let line2 = `🛑 OPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, halting production across the entire assembly line.`;
       let line3 = `💡 RECOMMENDED ACTION: Activate emergency backup buffer feed immediately or dispatch floating technicians to prevent line shutdown.`;
 
-      const qLower = q.toLowerCase();
       if (qLower.includes('shut down') || qLower.includes('station 1') || qLower.includes('stop') || qLower.includes('outage') || qLower.includes('bc-01')) {
         line1 = `💸 FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) due to complete line starvation and idle worker downtime.`;
         line2 = `🛑 OPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, leaving them with no parts so they cannot work.`;
