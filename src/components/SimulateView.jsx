@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Sliders, CheckCircle2, XCircle, Users, Wrench, ChevronRight, Sparkles } from 'lucide-react';
 import ThinkingMachine from './ThinkingMachine';
+import AiProcessAssistant from './AiProcessAssistant';
 
 export default function SimulateView({ onApproveIntervention }) {
   const [selectedScenario, setSelectedScenario] = useState('slowdown_10');
@@ -141,6 +142,13 @@ export default function SimulateView({ onApproveIntervention }) {
               />
             </div>
           </div>
+
+          {/* Interactive AI Process Assistant Query Box */}
+          <AiProcessAssistant
+            currentScenario={currentScenarioObj.label}
+            propagationData={propagationData}
+            selectedOption={selectedOption}
+          />
 
           {/* Intervention options */}
           <div className="rounded-xl bg-theme-card border border-theme-border overflow-hidden shadow-sm">

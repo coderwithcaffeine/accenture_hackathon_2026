@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Sliders, CheckCircle2, XCircle, Users, Wrench, ChevronRight, Sparkles } from 'lucide-react';
 import ThinkingMachine from './ThinkingMachine';
+import AiProcessAssistant from './AiProcessAssistant';
 
 export default function WhatIfSimulatorModal({ onClose, onApproveIntervention }) {
   const [selectedScenario, setSelectedScenario] = useState('slowdown_10');
@@ -144,7 +145,14 @@ export default function WhatIfSimulatorModal({ onClose, onApproveIntervention })
                 finalConclusion={`Scenario modeling indicates Option B (Move 1 operator) delivers the optimal trade-off: reduces queue propagation by 68% without incurring planned maintenance downtime.`}
               />
 
-              {/* Response Options (FIXED RECOMMENDED BADGE POSITIONING) */}
+              {/* Interactive AI Process Assistant Query Box */}
+              <AiProcessAssistant
+                currentScenario={sc.label}
+                propagationData={{ queue: propagation.queue, throughput: propagation.throughput, lossInr: propagation.loss }}
+                selectedOption={selectedOption}
+              />
+
+              {/* Response Options */}
               <div>
                 <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Intervention Options</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -161,7 +169,6 @@ export default function WhatIfSimulatorModal({ onClose, onApproveIntervention })
                             : 'border-slate-800 hover:border-slate-700 bg-slate-950'
                         }`}
                       >
-                        {/* INLINE HEADER BADGE TO PREVENT COLLISION/CLIPPING */}
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-1.5">
                             <Icon className={`w-4 h-4 ${opt.recommended ? 'text-emerald-400' : 'text-slate-400'}`} />

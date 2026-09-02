@@ -429,6 +429,46 @@ Write a concise 2-sentence executive summary for plant leadership.`,
         fallback: `The main current risk is ${payload.top_risk || 'BC-10 Chassis Alignment'}. Its cycle time is drifting upward and is likely to constrain line throughput within 11 minutes.`
       };
 
+    case 'CUSTOM_PROCESS_QUERY': {
+      const q = payload.userQuestion || 'How to optimize assembly line bottleneck?';
+      const sc = payload.scenario || 'BC-10 slows 10%';
+      const loss = payload.loss || '₹2.8L';
+
+      const prompt = `You are an expert AI Manufacturing & Digital Twin Process Engineer.
+Current Factory Twin Context:
+- Active Disruption Scenario: ${sc}
+- Simulated Financial Loss: ${loss}
+- Queue Impact: ${payload.queue || '+19 units'}
+- Throughput Impact: ${payload.throughput || '-18%'}
+
+User Process Question: "${q}"
+
+Respond in structured format:
+OPERATIONAL ANALYSIS: Concise 2-sentence engineering answer to "${q}".
+DATA IMPACT: Specific queue delta, OEE shift %, and financial savings.
+RECOMMENDED ACTION: Clear step-by-step recommendation for the floor supervisor.`;
+
+      let fallbackAnalysis = `Based on current digital twin simulation (${sc}), addressing constraint at station BC-10 minimizes downstream queue propagation and protects plant OEE.`;
+      if (q.toLowerCase().includes('queue') || q.toLowerCase().includes('eliminate')) {
+        fallbackAnalysis = `Reallocating 1 floating operator to BC-10 absorbs cycle time variation, capping queue buildup at +4 units rather than +19 units.`;
+      } else if (q.toLowerCase().includes('option') || q.toLowerCase().includes('compare')) {
+        fallbackAnalysis = `Option B (Move 1 operator) delivers 68% loss reduction (₹0.9L loss) with 12-min recovery, whereas Option C (Maintenance) requires a 25-min line pause (₹1.4L loss).`;
+      } else if (q.toLowerCase().includes('feed') || q.toLowerCase().includes('rate')) {
+        fallbackAnalysis = `Adjusting feed rate by 15% stabilizes upstream buffer queues, reducing bottleneck risk at BC-10 from 91% down to 34%.`;
+      }
+
+      const fallback = `⚡ OPERATIONAL ANALYSIS: ${fallbackAnalysis}
+
+📊 ESTIMATED DATA IMPACT:
+• Queue Delta: +4 units (vs +19 units unmitigated)
+• OEE Impact: +3.2% recovery
+• Net Financial Saved: ₹1.9L ($2,300)
+
+💡 RECOMMENDED ACTION: Deploy Option B (Reallocate floating technician) and monitor cycle time drift over the next 15 production units.`;
+
+      return { prompt, fallback };
+    }
+
     default:
       return { prompt: '', fallback: 'Operational telemetry within standard control parameters.' };
   }
