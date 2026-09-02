@@ -450,9 +450,9 @@ FACTORY DIGITAL TWIN CONTEXT:
 USER QUESTION: "${q}"
 
 If the question IS related to the manufacturing process or stations, respond in EXACTLY 3 lines:
-Line 1: "💸 FINANCIAL LOSS: [Exact financial loss amount and cost impact]"
-Line 2: "🛑 OPERATIONAL IMPACT: [Exact line starvation impact on downstream stations]"
-Line 3: "💡 RECOMMENDED ACTION: [Actionable advice or recovery steps]"`;
+Line 1: "FINANCIAL LOSS: [Exact financial loss amount and cost impact]"
+Line 2: "OPERATIONAL IMPACT: [Exact line starvation impact on downstream stations]"
+Line 3: "RECOMMENDED ACTION: [Actionable advice or recovery steps]"`;
 
       const qLower = q.toLowerCase();
 
@@ -476,26 +476,26 @@ Line 3: "💡 RECOMMENDED ACTION: [Actionable advice or recovery steps]"`;
         };
       }
 
-      let line1 = `💸 FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) for every 10 minutes of complete station outage.`;
-      let line2 = `🛑 OPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, halting production across the entire assembly line.`;
-      let line3 = `💡 RECOMMENDED ACTION: Activate emergency backup buffer feed immediately or dispatch floating technicians to prevent line shutdown.`;
+      let line1 = `FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) for every 10 minutes of complete station outage.`;
+      let line2 = `OPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, halting production across the entire assembly line.`;
+      let line3 = `RECOMMENDED ACTION: Activate emergency backup buffer feed immediately or dispatch floating technicians to prevent line shutdown.`;
 
       if (qLower.includes('shut down') || qLower.includes('station 1') || qLower.includes('stop') || qLower.includes('outage') || qLower.includes('bc-01')) {
-        line1 = `💸 FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) due to complete line starvation and idle worker downtime.`;
-        line2 = `🛑 OPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, leaving them with no parts so they cannot work.`;
-        line3 = `💡 RECOMMENDED ACTION: Activate emergency backup buffer feed immediately or dispatch floating technicians for quick-turnaround restoration.`;
+        line1 = `FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) due to complete line starvation and idle worker downtime.`;
+        line2 = `OPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, leaving them with no parts so they cannot work.`;
+        line3 = `RECOMMENDED ACTION: Activate emergency backup buffer feed immediately or dispatch floating technicians for quick-turnaround restoration.`;
       } else if (qLower.includes('queue') || qLower.includes('eliminate')) {
-        line1 = `💸 FINANCIAL LOSS: Unmitigated queue buildup at BC-10 results in ₹2.8L ($3,400) in throughput delay loss.`;
-        line2 = `🛑 OPERATIONAL IMPACT: Station BC-10 cycle time drift causes backpressure up to station BC-06, reducing plant throughput by 18%.`;
-        line3 = `💡 RECOMMENDED ACTION: Reallocate 1 floating technician to BC-10 to cap queue buildup at +4 units instead of +19 units.`;
+        line1 = `FINANCIAL LOSS: Unmitigated queue buildup at BC-10 results in ₹2.8L ($3,400) in throughput delay loss.`;
+        line2 = `OPERATIONAL IMPACT: Station BC-10 cycle time drift causes backpressure up to station BC-06, reducing plant throughput by 18%.`;
+        line3 = `RECOMMENDED ACTION: Reallocate 1 floating technician to BC-10 to cap queue buildup at +4 units instead of +19 units.`;
       } else if (qLower.includes('option') || qLower.includes('compare')) {
-        line1 = `💸 FINANCIAL LOSS: Option B (Move 1 operator) limits financial loss to ₹0.9L, saving ₹1.9L compared to Option A (Do nothing).`;
-        line2 = `🛑 OPERATIONAL IMPACT: Option B achieves 12-min line recovery without requiring a 25-min line stoppage for maintenance (Option C).`;
-        line3 = `💡 RECOMMENDED ACTION: Approve Option B in the Human-in-the-Loop gate to deploy technician reallocation immediately.`;
+        line1 = `FINANCIAL LOSS: Option B (Move 1 operator) limits financial loss to ₹0.9L, saving ₹1.9L compared to Option A (Do nothing).`;
+        line2 = `OPERATIONAL IMPACT: Option B achieves 12-min line recovery without requiring a 25-min line stoppage for maintenance (Option C).`;
+        line3 = `RECOMMENDED ACTION: Approve Option B in the Human-in-the-Loop gate to deploy technician reallocation immediately.`;
       } else if (qLower.includes('feed') || qLower.includes('rate')) {
-        line1 = `💸 FINANCIAL LOSS: Cutting feed rate by 15% incurs a mild throughput loss of ₹1.2L ($1,450).`;
-        line2 = `🛑 OPERATIONAL IMPACT: Lowering feed rate relieves bottleneck pressure at BC-10, dropping risk from 91% to 34% across downstream stations.`;
-        line3 = `💡 RECOMMENDED ACTION: Temporarily throttle feed rate by 15% while station BC-10 undergoes preventative inspection.`;
+        line1 = `FINANCIAL LOSS: Cutting feed rate by 15% incurs a mild throughput loss of ₹1.2L ($1,450).`;
+        line2 = `OPERATIONAL IMPACT: Lowering feed rate relieves bottleneck pressure at BC-10, dropping risk from 91% to 34% across downstream stations.`;
+        line3 = `RECOMMENDED ACTION: Temporarily throttle feed rate by 15% while station BC-10 undergoes preventative inspection.`;
       }
 
       const fallback = `${line1}\n${line2}\n${line3}`;

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Sparkles, Send, Bot, HelpCircle, RefreshCw, CheckCircle2, DollarSign, AlertCircle, Lightbulb, ShieldAlert } from 'lucide-react';
+import { Sparkles, Send, Bot, HelpCircle, RefreshCw, CheckCircle2, DollarSign, AlertCircle, Lightbulb, ShieldAlert, MessageSquare } from 'lucide-react';
 import ThinkingMachine from './ThinkingMachine';
 
 export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%', propagationData = {}, selectedOption = 'B' }) {
   const defaultInitialResponse = {
-    explanation: `💸 FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) due to complete line starvation and idle worker downtime for every 10 minutes of outage.\n🛑 OPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, leaving them with no parts so they cannot work.\n💡 RECOMMENDED ACTION: Activate emergency backup buffer feed immediately or dispatch floating technicians for quick-turnaround restoration.`,
+    explanation: `FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) due to complete line starvation and idle worker downtime for every 10 minutes of outage.\nOPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, leaving them with no parts so they cannot work.\nRECOMMENDED ACTION: Activate emergency backup buffer feed immediately or dispatch floating technicians for quick-turnaround restoration.`,
     source: 'GEMINI_AI_REASONER',
     model: 'gemini-2.5-flash'
   };
@@ -15,22 +15,22 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
   const [showThinking, setShowThinking] = useState(true);
 
   const presetQuestions = [
-    "What if I shut down station 1 completely?",
-    "How can we eliminate queue buildup at BC-10 entirely?",
-    "Compare Option B (Operator Move) vs Option C (Maintenance)",
-    "What is the weather today in Paris?" // Intentionally added to demo domain guardrail
+    { text: "What if I shut down station 1 completely?", testGuardrail: false },
+    { text: "How can we eliminate queue buildup at BC-10 entirely?", testGuardrail: false },
+    { text: "Compare Option B (Operator Move) vs Option C (Maintenance)", testGuardrail: false },
+    { text: "What is the capital expenditure model of general corporate finance?", testGuardrail: true }
   ];
 
   const customThinkingSteps = [
     {
-      label: "Domain & Guardrail Check",
+      label: "Domain & Guardrail Boundary Evaluation",
       detail: "Validating question against 38-station manufacturing domain boundary...",
       status: "done",
       output: "Domain context verified: Mixed-model vehicle assembly line (BC, PT, FA)."
     },
     {
       label: "Line Starvation & Bottleneck Simulation",
-      detail: "Evaluating upstream/downstream station dependency matrix and queue drift...",
+      detail: "Evaluating upstream and downstream station dependency matrix...",
       status: "done",
       output: "Station dependency evaluated across 38 stations and 600 production units."
     },
@@ -55,7 +55,6 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
     setLoading(true);
     setShowThinking(true);
 
-    // Call Gemini API with live context
     fetch('/api/gemini-explain', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -106,7 +105,7 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
                 Assembly Line Domain AI
               </span>
             </h3>
-            <p className="text-xs text-slate-400">Ask any assembly line process question for an instant 3-line analysis</p>
+            <p className="text-xs text-slate-400">Ask any assembly line process question for an instant 3-line operational analysis</p>
           </div>
         </div>
         <Sparkles className="w-4 h-4 text-indigo-400 animate-pulse" />
@@ -122,15 +121,19 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
           {presetQuestions.map((pq, idx) => (
             <button
               key={idx}
-              onClick={() => { setUserQuery(pq); handleAsk(pq); }}
+              onClick={() => { setUserQuery(pq.text); handleAsk(pq.text); }}
               type="button"
               className={`text-[11px] px-3 py-1.5 rounded-lg border transition-all text-left flex items-center gap-1.5 ${
-                pq.includes("Paris")
+                pq.testGuardrail
                   ? 'bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20'
                   : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:text-indigo-300 hover:border-indigo-500/40 hover:bg-indigo-950/30'
               }`}
             >
-              <span>{pq.includes("Paris") ? '⚠️ (Test Guardrail)' : '💬'}</span> {pq}
+              <MessageSquare className={`w-3 h-3 ${pq.testGuardrail ? 'text-amber-400' : 'text-indigo-400'}`} />
+              <span>{pq.text}</span>
+              {pq.testGuardrail && (
+                <span className="text-[9px] font-mono text-amber-400 bg-amber-500/20 px-1 rounded ml-1">Guardrail Test</span>
+              )}
             </button>
           ))}
         </div>
@@ -177,13 +180,13 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
         />
       )}
 
-      {/* Formatted 3-Line Answer Response Box (ALWAYS VISIBLE BY DEFAULT) */}
+      {/* Formatted 3-Line Answer Response Box */}
       {aiResponse && (
         <div className="p-4 rounded-xl bg-slate-950 border border-indigo-500/30 space-y-3 animate-fade-in">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <span className="text-[10px] font-mono font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              Station AI 3-Line Operational Response
+              Station AI Operational Response
             </span>
             <span className="text-[9px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
               {aiResponse.model || 'gemini-2.5-flash'}
@@ -206,9 +209,9 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
             /* Crisp 3-Line Structured Response Cards */
             <div className="space-y-2 text-xs text-slate-200 leading-relaxed font-sans">
               {aiResponse.explanation.split('\n').filter(line => line.trim()).map((line, i) => {
-                const isFinancial = line.includes('FINANCIAL') || line.includes('💸');
-                const isImpact = line.includes('OPERATIONAL') || line.includes('🛑');
-                const isAction = line.includes('RECOMMENDED') || line.includes('💡');
+                const isFinancial = line.includes('FINANCIAL');
+                const isImpact = line.includes('OPERATIONAL');
+                const isAction = line.includes('RECOMMENDED');
 
                 return (
                   <div
