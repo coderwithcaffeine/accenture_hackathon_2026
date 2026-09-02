@@ -3,10 +3,16 @@ import { Sparkles, Send, Bot, HelpCircle, RefreshCw, CheckCircle2, DollarSign, A
 import ThinkingMachine from './ThinkingMachine';
 
 export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%', propagationData = {}, selectedOption = 'B' }) {
-  const [userQuery, setUserQuery] = useState('');
+  const defaultInitialResponse = {
+    explanation: `💸 FINANCIAL LOSS: The plant will lose ₹8.9L ($10,800) due to complete line starvation and idle worker downtime for every 10 minutes of outage.\n🛑 OPERATIONAL IMPACT: Shutting down station 1 (BC-01 Metal Stamping) starves all 37 downstream stations, leaving them with no parts so they cannot work.\n💡 RECOMMENDED ACTION: Activate emergency backup buffer feed immediately or dispatch floating technicians for quick-turnaround restoration.`,
+    source: 'GEMINI_AI_REASONER',
+    model: 'gemini-2.5-flash'
+  };
+
+  const [userQuery, setUserQuery] = useState('What if I shut down station 1 completely?');
   const [loading, setLoading] = useState(false);
-  const [aiResponse, setAiResponse] = useState(null);
-  const [showThinking, setShowThinking] = useState(false);
+  const [aiResponse, setAiResponse] = useState(defaultInitialResponse);
+  const [showThinking, setShowThinking] = useState(true);
 
   const presetQuestions = [
     "What if I shut down station 1 completely?",
@@ -48,7 +54,6 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
 
     setLoading(true);
     setShowThinking(true);
-    setAiResponse(null);
 
     // Call Gemini API with live context
     fetch('/api/gemini-explain', {
@@ -68,11 +73,10 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
     })
       .then(res => res.json())
       .then(data => {
-        // Minimum delay to let user see AI reasoning stream
         setTimeout(() => {
           setAiResponse(data);
           setLoading(false);
-        }, 1200);
+        }, 1000);
       })
       .catch(() => {
         setLoading(false);
@@ -162,7 +166,7 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
         </button>
       </form>
 
-      {/* Visible Thinking Machine Stream while loading or after query */}
+      {/* Visible Thinking Machine Stream */}
       {showThinking && (
         <ThinkingMachine
           title="Gemini AI Reasoning Trace"
@@ -173,13 +177,13 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
         />
       )}
 
-      {/* Formatted Answer Response Box */}
-      {aiResponse && !loading && (
+      {/* Formatted 3-Line Answer Response Box (ALWAYS VISIBLE BY DEFAULT) */}
+      {aiResponse && (
         <div className="p-4 rounded-xl bg-slate-950 border border-indigo-500/30 space-y-3 animate-fade-in">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <span className="text-[10px] font-mono font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              Station AI Operational Response
+              Station AI 3-Line Operational Response
             </span>
             <span className="text-[9px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
               {aiResponse.model || 'gemini-2.5-flash'}
@@ -199,7 +203,7 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
               </div>
             </div>
           ) : (
-            /* Crisp 3-Line Response Display */
+            /* Crisp 3-Line Structured Response Cards */
             <div className="space-y-2 text-xs text-slate-200 leading-relaxed font-sans">
               {aiResponse.explanation.split('\n').filter(line => line.trim()).map((line, i) => {
                 const isFinancial = line.includes('FINANCIAL') || line.includes('💸');
@@ -209,7 +213,7 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
                 return (
                   <div
                     key={i}
-                    className={`p-3 rounded-lg border flex items-start gap-2.5 transition-all ${
+                    className={`p-3 rounded-lg border flex items-start gap-2.5 transition-all shadow-sm ${
                       isFinancial ? 'bg-rose-500/10 border-rose-500/30 text-rose-200' :
                       isImpact ? 'bg-amber-500/10 border-amber-500/30 text-amber-200' :
                       isAction ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-200' :
@@ -223,7 +227,7 @@ export default function AiProcessAssistant({ currentScenario = 'BC-10 slows 10%'
                       {!isFinancial && !isImpact && !isAction && <Bot className="w-4 h-4 text-indigo-400" />}
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-xs leading-normal">{line}</p>
+                      <p className="font-semibold text-xs leading-normal">{line}</p>
                     </div>
                   </div>
                 );
