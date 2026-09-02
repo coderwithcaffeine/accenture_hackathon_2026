@@ -1,5 +1,7 @@
 # DigitalTwin.ai — Predictive Mixed-Model Assembly Line Digital Twin
 > **Accenture Innovation Challenge 2026 — Track 4: DigitalTwin.ai (Round 2 Submission)**  
+> **Team Name**: AIwithHardware  
+> **Lead Developer**: Kartikey Yadav (IIT Delhi, Biotechnology)  
 > *Predict • Simulate • Prevent • Trust*
 
 ---
@@ -14,6 +16,19 @@ In modern automotive and discrete manufacturing, assembly lines are rarely ideal
 - **Diverse Stakeholder Needs**: Floor supervisors require real-time line control; plant managers require predictive bottleneck forecasts; executive leadership requires validated ROI business cases.
 
 **DigitalTwin.ai** delivers an end-to-end predictive digital twin that bridges legacy equipment gaps, predicts bottlenecks before queue growth stalls throughput, isolates defect root origins via Z-score covariance tracing, and empowers plant operators with a **Human-in-the-Loop AI Thinking Machine**.
+
+---
+
+## 🏆 Round 2 Hackathon-Winning Features & Creative Enhancements
+
+1. **🌊 Live Line Propagation & Starvation Heatmap Mode**:
+   - Visualizes real-time **Upstream Backpressure Queue Waves** (S3 ➔ S2 slowdown propagation) and **Downstream Part Starvation Waves** directly on the 38-station material conveyor track.
+2. **⚡ Interactive 38-Station Disruption Sandbox**:
+   - Pick ANY station (`BC-01` to `FA-16`) and drag the **Disruption Severity Slider (10% to 100%)** to simulate real-time queue accumulation, throughput drop %, defect risk elevation, and financial loss in real-time.
+3. **🤖 Gemini AI Station Assistant & Domain Guardrail**:
+   - Interactive process query box with system role context, 3-line structured operational analysis (Financial Loss, Line Starvation, Actionable Recommendation), and domain boundary refusal (`"I am station ai not general purpose ai"`).
+4. **🧠 Step-by-Step AI Reasoning Trace (Thinking Machine)**:
+   - Live collapsible trace showing domain validation, dependency matrix calculation, financial impact assessment, and 3-line operational synthesis.
 
 ---
 

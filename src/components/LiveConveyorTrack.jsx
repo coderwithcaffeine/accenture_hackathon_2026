@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Pause, RotateCcw, AlertTriangle, Gauge } from 'lucide-react';
+import { Play, Pause, RotateCcw, AlertTriangle, Waves, Zap, ShieldAlert } from 'lucide-react';
 
 /**
- * LiveConveyorTrack — animated material-flow visualizer.
- * Displays live vehicle movement across 38 stations with status dots and safe tooltip positioning.
+ * LiveConveyorTrack — animated material-flow visualizer with Propagation Heatmap Mode.
+ * Displays live vehicle movement across 38 stations, backpressure wave propagation, and starvation risks.
  */
 export default function LiveConveyorTrack({ stationStatuses, activeAlerts, latestUnitId, onInspectUnit }) {
   const [isPlaying, setIsPlaying]         = useState(true);
   const [currentStationIdx, setIdx]       = useState(0);
   const [currentUnit, setCurrentUnit]     = useState(1);
   const [speed, setSpeed]                 = useState(1);
+  const [showHeatmap, setShowHeatmap]     = useState(false);
 
   const totalStations = stationStatuses?.length || 0;
 
@@ -35,24 +36,42 @@ export default function LiveConveyorTrack({ stationStatuses, activeAlerts, lates
   const isAmber     = current?.status === 'amber';
   const progress    = (currentStationIdx / (totalStations - 1)) * 100;
 
+  // Find primary bottleneck station index for heatmap wave calculation
+  const bottleneckIdx = stationStatuses.findIndex(s => s.status === 'red' || s.id === 'BC-10');
+
   return (
-    <div className="rounded-xl bg-theme-card border border-theme-border shadow-sm">
+    <div className="rounded-xl bg-theme-card border border-theme-border shadow-md transition-all">
 
       {/* Header toolbar */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-theme-border">
+      <div className="flex flex-wrap items-center justify-between px-5 py-3 border-b border-theme-border gap-3 bg-slate-950/40">
         <div className="flex items-center gap-2.5">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
           </span>
           <h2 className="text-sm font-semibold text-theme-text">Live Material Conveyor</h2>
-          <span className="text-xs text-theme-muted flex items-center gap-1.5 ml-2">
-            Unit <span className="font-mono font-bold text-indigo-400">#{currentUnit}</span> at <span className="font-mono font-semibold text-theme-text">{current?.id}</span>
+          <span className="text-xs text-theme-muted flex items-center gap-1.5 ml-2 font-mono">
+            Unit <span className="font-bold text-indigo-400">#{currentUnit}</span> at <span className="font-semibold text-theme-text">{current?.id}</span>
           </span>
         </div>
 
-        {/* Playback Controls */}
+        {/* Playback & Heatmap Mode Controls */}
         <div className="flex items-center gap-2">
+          {/* Propagation Heatmap Toggle Button */}
+          <button
+            onClick={() => setShowHeatmap(!showHeatmap)}
+            type="button"
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all shadow-sm ${
+              showHeatmap
+                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 font-semibold ring-1 ring-rose-500/30'
+                : 'bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800'
+            }`}
+          >
+            <Waves className={`w-3.5 h-3.5 ${showHeatmap ? 'text-rose-400 animate-pulse' : 'text-slate-400'}`} />
+            {showHeatmap ? 'Propagation Heatmap: ACTIVE' : 'Toggle Propagation Heatmap'}
+          </button>
+
+          {/* Speed selector */}
           <div className="flex items-center gap-0.5 bg-theme-bg border border-theme-border rounded-lg p-1">
             {[1, 2, 5].map(s => (
               <button
@@ -92,8 +111,23 @@ export default function LiveConveyorTrack({ stationStatuses, activeAlerts, lates
         </div>
       </div>
 
+      {/* Heatmap Banner Notification */}
+      {showHeatmap && (
+        <div className="px-5 py-2.5 bg-rose-950/40 border-b border-rose-500/30 flex items-center justify-between text-xs text-rose-200 animate-fade-in">
+          <div className="flex items-center gap-2">
+            <ShieldAlert className="w-4 h-4 text-rose-400 flex-shrink-0 animate-pulse" />
+            <span>
+              <strong className="font-mono text-rose-300 uppercase">Propagation Analysis Active:</strong> Upstream stations experiencing <strong className="text-amber-300 font-mono">Backpressure Queue Waves (S3 ➔ S2)</strong> · Downstream stations experiencing <strong className="text-sky-300 font-mono">Part Starvation Risks</strong>.
+            </span>
+          </div>
+          <span className="text-[10px] font-mono bg-rose-500/20 px-2 py-0.5 rounded border border-rose-500/30 text-rose-300">
+            PPT Model Alignment
+          </span>
+        </div>
+      )}
+
       {/* Alert Strip (shown when current station is critical/warning) */}
-      {(isRed || isAmber) && (
+      {!showHeatmap && (isRed || isAmber) && (
         <div className={`px-5 py-2 flex items-center justify-between text-xs transition-colors ${
           isRed
             ? 'bg-rose-500/10 border-b border-rose-500/20 text-rose-300'
@@ -164,7 +198,7 @@ export default function LiveConveyorTrack({ stationStatuses, activeAlerts, lates
           </div>
         </div>
 
-        {/* Station Waypoint Dots */}
+        {/* Station Waypoint Dots & Heatmap Wave Indicators */}
         <div className="relative z-10 flex justify-between items-center">
           {stationStatuses.map((st, idx) => {
             const isActive  = idx === currentStationIdx;
@@ -172,6 +206,10 @@ export default function LiveConveyorTrack({ stationStatuses, activeAlerts, lates
             const stRed     = st.status === 'red';
             const stAmber   = st.status === 'amber';
             const showLabel = idx === 0 || idx === totalStations - 1 || idx % 5 === 0 || stRed;
+
+            // Heatmap propagation logic: upstream backpressure vs downstream starvation
+            const isUpstreamWave = showHeatmap && bottleneckIdx !== -1 && idx < bottleneckIdx && idx >= bottleneckIdx - 3;
+            const isDownstreamStarved = showHeatmap && bottleneckIdx !== -1 && idx > bottleneckIdx && idx <= bottleneckIdx + 4;
 
             return (
               <div
@@ -185,6 +223,10 @@ export default function LiveConveyorTrack({ stationStatuses, activeAlerts, lates
                     ? stRed
                       ? 'bg-rose-500 border-white ring-4 ring-rose-500/40 scale-125'
                       : 'bg-indigo-500 border-white ring-4 ring-indigo-500/40 scale-125'
+                    : isUpstreamWave
+                    ? 'bg-amber-500 border-amber-300 ring-2 ring-amber-500/50 animate-pulse'
+                    : isDownstreamStarved
+                    ? 'bg-sky-500 border-sky-300 ring-2 ring-sky-500/50'
                     : stRed
                     ? 'bg-rose-500 border-rose-300'
                     : stAmber
@@ -193,6 +235,18 @@ export default function LiveConveyorTrack({ stationStatuses, activeAlerts, lates
                     ? 'bg-emerald-500 border-emerald-300'
                     : 'bg-slate-800 border-slate-700'
                 }`} />
+
+                {/* Heatmap Wave Tag (shown when Heatmap mode is ACTIVE) */}
+                {isUpstreamWave && (
+                  <span className="absolute -top-7 font-mono text-[8px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1 py-0.5 rounded whitespace-nowrap shadow-sm animate-pulse">
+                    Backpressure ↑
+                  </span>
+                )}
+                {isDownstreamStarved && (
+                  <span className="absolute -top-7 font-mono text-[8px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40 px-1 py-0.5 rounded whitespace-nowrap shadow-sm">
+                    Starved 🛑
+                  </span>
+                )}
 
                 {/* Station Label */}
                 {showLabel && (
